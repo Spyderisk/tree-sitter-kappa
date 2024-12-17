@@ -1,0 +1,394 @@
+[
+  {
+    "type": "agent",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "agent_name",
+          "named": true
+        },
+        {
+          "type": "interface",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "agent_name",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "name",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "interface",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "more_interface",
+          "named": true
+        },
+        {
+          "type": "site",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "internal_state",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "state_name",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "link_state",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "agent_name",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "site_name",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "more",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "agent",
+          "named": true
+        },
+        {
+          "type": "more",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "more_interface",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "more_interface",
+          "named": true
+        },
+        {
+          "type": "site",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "more_pattern",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "pattern",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "name",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "pattern",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "agent",
+          "named": true
+        },
+        {
+          "type": "more_pattern",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "rate",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "algebraic_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "rev_more",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "agent",
+          "named": true
+        },
+        {
+          "type": "more",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "rev_rule_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "agent",
+          "named": true
+        },
+        {
+          "type": "rev_more",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "rule_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "agent",
+          "named": true
+        },
+        {
+          "type": "more",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "site",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "counter",
+          "named": true
+        },
+        {
+          "type": "internal_state",
+          "named": true
+        },
+        {
+          "type": "link_state",
+          "named": true
+        },
+        {
+          "type": "site_name",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "site_name",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "name",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "source_file",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "agent",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "state_name",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "name",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "#",
+    "named": false
+  },
+  {
+    "type": "(",
+    "named": false
+  },
+  {
+    "type": ")",
+    "named": false
+  },
+  {
+    "type": ",",
+    "named": false
+  },
+  {
+    "type": "->",
+    "named": false
+  },
+  {
+    "type": ".",
+    "named": false
+  },
+  {
+    "type": "<->",
+    "named": false
+  },
+  {
+    "type": "@",
+    "named": false
+  },
+  {
+    "type": "[",
+    "named": false
+  },
+  {
+    "type": "]",
+    "named": false
+  },
+  {
+    "type": "_",
+    "named": false
+  },
+  {
+    "type": "algebraic_expression",
+    "named": true
+  },
+  {
+    "type": "counter",
+    "named": true
+  },
+  {
+    "type": "label",
+    "named": true
+  },
+  {
+    "type": "number",
+    "named": true
+  },
+  {
+    "type": "token",
+    "named": true
+  },
+  {
+    "type": "{",
+    "named": false
+  },
+  {
+    "type": "{#}",
+    "named": false
+  },
+  {
+    "type": "|",
+    "named": false
+  },
+  {
+    "type": "}",
+    "named": false
+  }
+]

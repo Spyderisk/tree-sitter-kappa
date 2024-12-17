@@ -1,0 +1,173 @@
+// In this model there are beds that can be occupied by a person
+// and are in either Large Hospital or Small Hospital
+%agent: Bed(p, hospital{large small})
+// And people who can have a disease state, the usual SIR and
+// "h" for serious enough to be hospitalised, "c" for critical,
+// and "d" for dead. A person can occupy a bed.
+%agent: Person(covid{s i r h c d}, bed)
+
+//// The natural history of covid as it was generally believed
+//// to be at some point 2020, not using information that we only
+//// knew later. Very crude parametrisation for illustration, not
+//// to the standard needed for publication or policy advice, but
+//// then this model was written in a couple of hours late at
+//// night.
+
+// Transmission rate corresponding to a basic reproduction number
+// of about 2. Rates varied significantly according to the level
+// of countermeasures and interventions. This rate is plenty to
+// saturate the generous hospital bed provision (see below,
+// initial conditions).
+%var: beta 0.28
+
+// Infection involves two people, at the transmission rate,
+// normalised by the size of the population. This uses 'edit'
+// notation which is convenient and more terse than ->
+// notation. For simplicity, we assume transmission does not
+// happen in hospitals.
+'infection' Person(covid{s/i}), Person(covid{i}) @ beta/|Person()|
+
+// After about a week, either recover, or progress to severe
+// disease.
+%var: gamma 1/7
+
+// Perhaps 80% of cases are mild, but 20% are severe enough
+// to require an going to the hospital
+%var: pmild   0.8
+%var: psevere (1-pmild)
+
+// The nice thing about continuous time markov chains is you
+// can "split" rates with probabilities like this and it
+// does what one might expect
+'recover' Person(covid{i/r}) @ gamma*pmild
+'severe'  Person(covid{i/h}) @ gamma*psevere
+
+// We try to put a person who needs one into a bed within a
+// day. Read this as: a person in "h" state (meaning severe
+// disease) who is not in a bed "[.]", and a bed with no
+// person in it form a bond; the person now occupies the
+// bed.
+//
+// Here we introduce a bias, hypothesizing that patients
+// who are ambulatory or have their own transport or something
+// tend to present at the small hospital.
+'admit_small'
+    Person(covid{h}, bed[.]), Bed(p[.], hospital{small}) ->
+    Person(covid{h}, bed[1]), Bed(p[1], hospital{small}) @ 1
+
+'admit_large'
+    Person(covid{h}, bed[.]), Bed(p[.], hospital{large}) ->
+    Person(covid{h}, bed[1]), Bed(p[1], hospital{large}) @ 0.5
+
+// Once in hospital, half worsen to a critical stage
+// and others recover within a week.
+%var: pcrit   0.5
+// We have run out of greek letters so we use the k_foo
+// convention of molecular biologists or chemists for naming
+// rate constants.
+%var: k_crit  1/7
+
+'critical'         Person(covid{h/c}) @ k_crit*pcrit
+
+// Those that recover from hospital also release their bed
+'recover_hospital' Person(covid{h/r}, bed[_/.]) @ k_crit*(1-pcrit)
+
+// If the disease reaches the critical stage, the person has
+// a 50% chance of dying or recovering in another week.
+%var: pmort  0.5
+%var: k_mort 1/7
+
+'recover_icu' Person(covid{c/r}, bed[_/.]) @ k_mort*(1-pmort)
+
+// Now, we use a trick. We can produce "tokens", which have
+// no structure unlike agents, and use them to count the
+// number of deaths in each hospital. When each person
+// dies, they leave a trace of which hospital they were in.
+
+%token: MLARGE
+'mortality_large'
+     Person(covid{c}, bed[1]), Bed(p[1], hospital{large})
+  -> Person(covid{d}, bed[1]), Bed(p[1], hospital{large})
+  | 1 MLARGE @ k_mort*pmort
+
+%token: MSMALL
+'mortality_small'
+     Person(covid{c}, bed[1]), Bed(p[1], hospital{small})
+  -> Person(covid{d}, bed[1]), Bed(p[1], hospital{small})
+  | 1 MSMALL @ k_mort*pmort
+
+// When a person has died, their bed is released within
+// the hour
+'release_bed'
+     Person(covid{d}, bed[1]), Bed(p[1])
+  -> Person(covid{d}, bed[.]), Bed(p[.])
+  @ 24
+
+////
+//// Transfer between hospitals
+////
+// Until now, there is no triage, no sending of patients to
+// other hospitals, so we would expect to have the same mortality
+// rate in all hospitals. This rule is relatively simple, we can
+// transfer patients between hospitals if there are free beds and
+// they are hospitalised but not in the critical disease state.
+// This happens quickly, in about an hour.
+%var: k_trans 24
+
+// Transfer only goes from small hospital to large hospital, not
+// the reverse. The rate is proportional to the fraction of beds
+// occupied by a person with critical disease. The greater the
+// proportion of critical patients, the greater the rate that
+// non-critical patients get sent elsewhere.
+'transfer'
+     Person(covid{h}, bed[1]),
+     Bed(p[1], hospital{small}),
+     Bed(p[.], hospital{large})
+  ->
+     Person(covid{h}, bed[1]),
+     Bed(p[.], hospital{small}),
+     Bed(p[1], hospital{large})
+ @ k_trans * |Person(covid{c}, bed[1]), Bed(p[1], hospital{small})| / |Bed(hospital{small})|
+
+// We set up observables for each disease state which will produce
+// the standard epidemic curves, normalised as a fraction of the
+// population.
+%obs: S |Person(covid{s})|/|Person()|
+%obs: I |Person(covid{i})|/|Person()|
+%obs: R |Person(covid{r})|/|Person()|
+%obs: H |Person(covid{h})|/|Person()|
+%obs: C |Person(covid{c})|/|Person()|
+%obs: D |Person(covid{d})|/|Person()|
+
+// We can also observe bed occupancy in each of the two hospitals
+%obs: BL |Bed(p[_], hospital{large})|/|Bed(hospital{large})|
+%obs: BS |Bed(p[_], hospital{small})|/|Bed(hospital{small})|
+
+// We can have more detail, fraction of beds occupied by critically
+// ill patients
+%obs: BCL |Person(covid{c}, bed[1]), Bed(p[1], hospital{large})|/|Bed(hospital{large})|
+%obs: BCS |Person(covid{c}, bed[1]), Bed(p[1], hospital{small})|/|Bed(hospital{small})|
+
+// Finally, we count the tokens which will report mortality
+// per bed in each hospital (per day, see below)
+%obs: ML |MLARGE|/|Bed(hospital{large})|
+%obs: MS |MSMALL|/|Bed(hospital{small})|
+
+// Initial conditions remain. A population of 10000 people, 10 of
+// whom are initially infected
+%init: 9990 Person(covid{s})
+%init: 10   Person(covid{i})
+
+// Two hospitals, one with 100 beds, the other with 10. This is
+// rather more than the UK typical 2.5-3 beds per 1000 people.
+%init: 100 Bed(hospital{large})
+%init: 10  Bed(hospital{small})
+
+// Finally some bookkeeping. Reset the mortality tokens each day,
+// that way the corresponding observables M1 and M2 are counted
+// per day
+%mod: alarm 1 do $APPLY 1 | -|MLARGE| MLARGE; repeat [true]
+%mod: alarm 1 do $APPLY 1 | -|MSMALL| MSMALL; repeat [true]
+
+// Stop the simulation when there are no more infectious people.
+%mod: |Person(covid{i})| = 0 do $STOP;
