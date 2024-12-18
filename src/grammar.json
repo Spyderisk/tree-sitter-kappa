@@ -36,6 +36,10 @@
           },
           {
             "type": "SYMBOL",
+            "name": "fr_rule"
+          },
+          {
+            "type": "SYMBOL",
             "name": "ambi_rule"
           },
           {
@@ -759,7 +763,7 @@
             },
             {
               "type": "SYMBOL",
-              "name": "more"
+              "name": "rev_more"
             },
             {
               "type": "CHOICE",

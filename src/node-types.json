@@ -501,6 +501,33 @@
     }
   },
   {
+    "type": "fr_rule",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "label",
+          "named": true
+        },
+        {
+          "type": "rate",
+          "named": true
+        },
+        {
+          "type": "rev_rule_expression",
+          "named": true
+        },
+        {
+          "type": "token",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "init_declaration",
     "named": true,
     "fields": {},
@@ -924,7 +951,7 @@
           "named": true
         },
         {
-          "type": "more",
+          "type": "rev_more",
           "named": true
         }
       ]
@@ -967,6 +994,10 @@
         },
         {
           "type": "f_rule",
+          "named": true
+        },
+        {
+          "type": "fr_rule",
           "named": true
         },
         {

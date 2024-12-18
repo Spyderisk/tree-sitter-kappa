@@ -31,7 +31,7 @@ module.exports = grammar({
 				$.intervention,
 
 				$.f_rule,
-				// $.fr_rule,
+				$.fr_rule,
 				$.ambi_rule,
 				// $.ambi_fr_rule,
 
@@ -114,7 +114,7 @@ module.exports = grammar({
 		),
 		rev_more: $ => choice(
 			seq(
-				",", choice($.agent, "."), $.more, choice($.agent, "."), ","
+				",", choice($.agent, "."), $.rev_more, choice($.agent, "."), ","
 			),
 			"<->"
 		),
