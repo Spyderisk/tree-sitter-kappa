@@ -16,11 +16,16 @@ module.exports = grammar({
 	name: "kappa",
 
 	rules: {
-		source_file: $ => repeat(
-			choice(
-				$.agent,
-			)
-		),
+		// source_file: $ => repeat(
+		// 	choice(
+		// 		$.variable_declaration,
+		// 		$.init_declaration,
+		// 		$.signature_declaration,
+		// 		$.parameter_setting,
+		// 		$.declared_token,
+		// 		$.intervention
+		// 	)
+		// ),
 
 		// https://kappalanguage.org/sites/kappalanguage.org/files/inline-files/Kappa_Manual.pdf#28
 		pattern: $ => seq(
@@ -211,9 +216,9 @@ module.exports = grammar({
 
 		more_signature: $ => seq(optional(","), $.signature_interface), // Epsilon
 		set_of_internal_states: $ => seq("{", optional($.set_of_state_names), "}"), // Epsilon
-		set_of_state_names: $ => seq($.state_name, "␣", optional($.set_of_state_names)), // Epsilon
+		set_of_state_names: $ => seq($.state_name, optional(","), optional($.set_of_state_names)), // Epsilon // "␣" => optional(",")
 		set_of_link_states: $ => seq("[", optional($.set_of_stubs), "]"), // Epsilon
-		set_of_stubs: $ => seq($.site_name, ".", $.agent_name, "␣", optional($.set_of_stubs)), // Epsilon
+		set_of_stubs: $ => seq($.site_name, ".", $.agent_name, optional(","), optional($.set_of_stubs)), // Epsilon // "␣" => optional(",")
 
 		// https://kappalanguage.org/sites/kappalanguage.org/files/inline-files/Kappa_Manual.pdf#32
 
