@@ -1,0 +1,13 @@
+%var: rabbitbirth 2.1
+%var: rabbiteaten 0.4
+%var: foxbirth 0.01
+
+%agent: Rabbit()
+%agent: Fox()
+
+'rabbits born'  Rabbit(), . -> Rabbit(), Rabbit() @ rabbitbirth
+'foxes died'    Fox() -> . @ foxdeath
+'foxes born'    Fox(), Rabbit(), . -> Fox(), ., Fox() @ foxbirth
+
+%obs: 'Rabbits' |Rabbit()|
+%obs: 'Foxes'   |Fox()|

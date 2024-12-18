@@ -15,22 +15,33 @@
 module.exports = grammar({
 	name: "kappa",
 
+	extras: $ => [
+		/\s|\\\r?\n/,
+		$.comment,
+	],
+
 	rules: {
-		// source_file: $ => repeat(
-		// 	choice(
-		// 		$.variable_declaration,
-		// 		$.init_declaration,
-		// 		$.signature_declaration,
-		// 		$.parameter_setting,
-		// 		$.declared_token,
-		// 		$.intervention
-		// 	)
-		// ),
+		root: $ => repeat(
+			choice(
+				$.variable_declaration,
+				$.init_declaration,
+				$.signature_declaration,
+				$.parameter_setting,
+				$.declared_token,
+				$.intervention,
+
+				$.f_rule,
+				// $.fr_rule,
+				// $.ambi_rule,
+				// $.ambi_fr_rule,
+
+				$.plot_declaration,
+				$.observable_declaration,
+			)
+		),
 
 		// https://kappalanguage.org/sites/kappalanguage.org/files/inline-files/Kappa_Manual.pdf#28
-		pattern: $ => seq(
-			$.agent, optional($.more_pattern)
-		),
+		pattern: $ => prec.left(1, seq($.agent, optional($.more_pattern))),
 
 		agent_name: $ => $.name,
 		site_name: $ => $.name,
@@ -38,8 +49,11 @@ module.exports = grammar({
 
 		agent: $ => seq($.agent_name, "(", optional($.interface), ")"),
 		site: $ => choice( //FIXME (site_name internal_state) == counter
-			seq($.site_name, optional($.internal_state), optional($.link_state)),
-			seq($.site_name, optional($.link_state), optional($.internal_state)),
+			seq($.site_name, $.internal_state, $.link_state),
+			seq($.site_name, $.internal_state),
+			seq($.site_name, $.link_state, $.internal_state),
+			seq($.site_name, $.link_state),
+			$.site_name,
 			$.counter
 		),
 		interface: $ => seq($.site, optional($.more_interface)), // Epsilon
@@ -57,21 +71,32 @@ module.exports = grammar({
 			seq($.site_name, ".", $.agent_name),
 		), "]"),
 
+
+		f_rule: $ => seq(
+			optional($.label),
+			choice($.f_rule_chem, $.f_rule_edit)
+		),
+
+		ambi_rule: $ => seq(
+			optional($.label),
+			choice($.ambi_rule_chem, $.ambi_rule_edit)
+		),
+
 		// https://kappalanguage.org/sites/kappalanguage.org/files/inline-files/Kappa_Manual.pdf#2a
 		// Chemical notation
 
-		f_rule: $ => seq(
-			optional($.label), $.rule_expression, optional(seq("|", $.token)), "@", $.rate,
+		f_rule_chem: $ => seq(
+			$.rule_expression, optional(seq("|", $.token)), "@", $.rate,
 		),
 		fr_rule: $ => seq(
 			optional($.label), $.rev_rule_expression, optional(seq("|", $.token)), "@", $.rate, ",", $.rate,
 		),
 
-		ambi_rule: $ => seq(
-			optional($.label), $.rule_expression, optional(seq("|", $.token)), "@", $.rate, "{", $.rate, "}",
+		ambi_rule_chem: $ => seq(
+			$.rule_expression, optional(seq("|", $.token)), "@", $.rate, "{", $.rate, "}",
 		),
 		ambi_fr_rule: $ => seq(
-			optional($.label), $.rule_expression, optional(seq("|", $.token)), "@", $.rate, "{", $.rate, "}", $.rate,
+			optional($.label), $.rev_rule_expression, optional(seq("|", $.token)), "@", $.rate, "{", $.rate, "}", $.rate,
 		),
 
 		rule_expression: $ => seq(
@@ -99,14 +124,14 @@ module.exports = grammar({
 		// https://kappalanguage.org/sites/kappalanguage.org/files/inline-files/Kappa_Manual.pdf#2b
 		// Edit Notation
 
-		f_rule: $ => seq(
-			optional($.label), optional($.f_rule_expression), optional(seq("|", $.token)), "@", $.rate,
+		f_rule_edit: $ => seq(
+			optional($.f_rule_expression), optional(seq("|", $.token)), "@", $.rate,
 		),
-		ambi_rule: $ => seq(
-			optional($.label), optional($.f_rule_expression), optional(seq("|", $.token)), "@", $.rate, "{", $.rate, "}",
+		ambi_rule_edit: $ => seq(
+			optional($.f_rule_expression), optional(seq("|", $.token)), "@", $.rate, "{", $.rate, "}",
 		),
 
-		f_rule_expression: $ => seq($.agent_mod, optional($.more_agent_mod)), // Epsilon
+		f_rule_expression: $ => seq($.agent_mod, /*optional($.more_agent_mod)*/), // Epsilon
 
 		more_agent_mod: $ => seq( // Epsilon
 			",", $.agent_mod, optional($.more_agent_mod)
@@ -118,8 +143,11 @@ module.exports = grammar({
 		),
 
 		site_mod: $ => choice(
-			seq($.site_name, optional($.internal_state_mod), optional($.link_state_mod)),
-			seq($.site_name, optional($.link_state_mod),     optional($.internal_state_mod)),
+			seq($.site_name, $.internal_state_mod, $.link_state_mod),
+			seq($.site_name, $.internal_state_mod),
+			seq($.site_name, $.link_state_mod, $.internal_state_mod),
+			seq($.site_name, $.link_state_mod),
+			$.site_name,
 			seq($.counter_name, $.counter_state_mod)
 		),
 
@@ -155,7 +183,7 @@ module.exports = grammar({
 		counter_var: $ => seq("=", $.variable_name),
 		counter_mod: $ => seq(choice("-", "+"), "=", $.integer),
 		variable_name: $ => $.name,
-		
+
 		// https://kappalanguage.org/sites/kappalanguage.org/files/inline-files/Kappa_Manual.pdf#2e
 
 		variable_declaration: $ => seq("%var:", $.declared_variable_name, $.algebraic_expression),
@@ -166,7 +194,12 @@ module.exports = grammar({
 			$.defined_constant,
 			$.declared_variable_name,
 			$.reserved_variable_name,
-			seq($.algebraic_expression, $.binary_op, $.algebraic_expression),
+			// seq($.algebraic_expression, $.binary_op, $.algebraic_expression),
+			prec.left(1, seq($.algebraic_expression, choice("+", "-"), $.algebraic_expression)), // Prec according to KappaTools Grammar
+			prec.left(2, seq($.algebraic_expression, choice("*", "/"), $.algebraic_expression)),
+			prec.left(3, seq($.algebraic_expression, "[mod]", $.algebraic_expression)),
+			prec.right(4, seq($.algebraic_expression, "^", $.algebraic_expression)),
+
 			seq($.unary_op, "(", $.algebraic_expression, ")"),
 			seq("[max](", $.algebraic_expression, ")(", $.algebraic_expression, ")"),
 			seq("[min](", $.algebraic_expression, ")(", $.algebraic_expression, ")"),
@@ -183,9 +216,12 @@ module.exports = grammar({
 			"inf"
 		),
 
-		binary_op: $ => choice(
-			"+", "-", "*", "/", "^", "[mod]"
-		),
+		// binary_op: $ => choice(
+		// 	pred.left("+", "-"),
+		// 	"*", "/",
+		// 	"^",
+		// 	"[mod]"
+		// ),
 
 		unary_op: $ => choice(
 			"[log]", "[exp]", "[sin]", "[cos]", "[tan]", "[sqrt]"
@@ -195,22 +231,29 @@ module.exports = grammar({
 
 		// https://kappalanguage.org/sites/kappalanguage.org/files/inline-files/Kappa_Manual.pdf#2f
 
-		boolean_expression: $ => choice(
+		boolean_expression: $ => prec(5, choice(
 			seq($.algebraic_expression, choice("=", "<", ">"), $.algebraic_expression),
-			seq($.boolean_expression, choice("||", "&&"), $.boolean_expression),
+
+			prec.left(2, seq($.boolean_expression, "&&", $.boolean_expression)),
+			prec.left(1, seq($.boolean_expression, "||", $.boolean_expression)),
+
 			seq("[not]", $.boolean_expression),
 			$.boolean
-		),
+		)),
 
 		boolean: $ => choice("true", "false"),
 
 		// https://kappalanguage.org/sites/kappalanguage.org/files/inline-files/Kappa_Manual.pdf#30
 
+		plot_declaration: $ => seq("%plot:", $.declared_variable_name),
+		observable_declaration: $ => seq("%obs:", $.label, $.algebraic_expression),
+
+		// https://kappalanguage.org/sites/kappalanguage.org/files/inline-files/Kappa_Manual.pdf#31
 		signature_declaration: $ => seq("%agent:", $.signature_expression),
 		signature_expression: $ => seq($.agent_name, "(", $.signature_interface, ")"),
 		signature_interface: $ => choice( // This one is weird, I'm interpreting it different to how it's defined
-			seq($.site_name, optional($.set_of_internal_states), optional($.set_of_link_states),     optional($.more_signature)),
-			seq($.site_name, optional($.set_of_link_states),     optional($.set_of_internal_states), optional($.more_signature)),
+			seq($.site_name, optional($.set_of_internal_states), optional($.set_of_link_states), optional($.more_signature)),
+			seq($.site_name, optional($.set_of_link_states), optional($.set_of_internal_states), optional($.more_signature)),
 			seq($.site_name, "{=", $.integer, "/+=", $.integer, "}")
 		),
 
@@ -257,8 +300,8 @@ module.exports = grammar({
 			seq("$SPECIES_OFF", optional($.string_expression), $.pattern, $.boolean)
 		),
 
-		string_expression: $ => choice ( // Epsilon
-			seq("string.", optional($.string_expression)),
+		string_expression: $ => choice( // Epsilon
+			prec.right(1, seq("string.", optional($.string_expression))),
 			seq($.algebraic_expression, ".", $.string_expression)
 		),
 
@@ -272,5 +315,23 @@ module.exports = grammar({
 		number: $ => /[0-9]+/,
 		integer: $ => /-?[0-9]+/,
 		float: $ => /-?[0-9]+\.[0-9]+/,
-	}
+
+		// http://stackoverflow.com/questions/13014947/regex-to-match-a-c-style-multiline-comment/36328890#36328890
+		comment: _ => token(choice(
+			seq('//', /(\\+(.|\r?\n)|[^\\\n])*/),
+			seq(
+				'/*',
+				/[^*]*\*+([^/*][^*]*\*+)*/,
+				'/',
+			),
+		)),
+	},
+
+	conflicts: $ => [
+		[$.site_name, $.counter_name],
+		[$.site, $.site_mod],
+		[$.site, $.link_state_mod],
+		[$.internal_state, $.internal_state_mod],
+		[$.counter, $.counter_state_mod]
+	]
 });
