@@ -268,7 +268,7 @@ module.exports = grammar({
 
 		// https://kappalanguage.org/sites/kappalanguage.org/files/inline-files/Kappa_Manual.pdf#27
 		name: $ => choice(/[a-zA-Z][a-zA-Z0-9_~\-+]*/, /[_][a-zA-Z0-9_~\-+]+/),
-		label: $ => /"[^\n']+'/,
+		label: $ => /'[^\n']+'/,
 		number: $ => /[0-9]+/,
 		integer: $ => /-?[0-9]+/,
 		float: $ => /-?[0-9]+\.[0-9]+/,
