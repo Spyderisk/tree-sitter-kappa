@@ -36,6 +36,10 @@
           },
           {
             "type": "SYMBOL",
+            "name": "ambi_rule"
+          },
+          {
+            "type": "SYMBOL",
             "name": "plot_declaration"
           },
           {

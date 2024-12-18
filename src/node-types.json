@@ -96,6 +96,29 @@
     }
   },
   {
+    "type": "ambi_rule",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "ambi_rule_chem",
+          "named": true
+        },
+        {
+          "type": "ambi_rule_edit",
+          "named": true
+        },
+        {
+          "type": "label",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "ambi_rule_chem",
     "named": true,
     "fields": {},
@@ -934,6 +957,10 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "ambi_rule",
+          "named": true
+        },
         {
           "type": "declared_token",
           "named": true

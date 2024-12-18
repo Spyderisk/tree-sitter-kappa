@@ -32,7 +32,7 @@ module.exports = grammar({
 
 				$.f_rule,
 				// $.fr_rule,
-				// $.ambi_rule,
+				$.ambi_rule,
 				// $.ambi_fr_rule,
 
 				$.plot_declaration,
