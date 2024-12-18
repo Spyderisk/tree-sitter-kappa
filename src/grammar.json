@@ -44,6 +44,10 @@
           },
           {
             "type": "SYMBOL",
+            "name": "ambi_fr_rule"
+          },
+          {
+            "type": "SYMBOL",
             "name": "plot_declaration"
           },
           {

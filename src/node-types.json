@@ -96,6 +96,33 @@
     }
   },
   {
+    "type": "ambi_fr_rule",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "label",
+          "named": true
+        },
+        {
+          "type": "rate",
+          "named": true
+        },
+        {
+          "type": "rev_rule_expression",
+          "named": true
+        },
+        {
+          "type": "token",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "ambi_rule",
     "named": true,
     "fields": {},
@@ -984,6 +1011,10 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "ambi_fr_rule",
+          "named": true
+        },
         {
           "type": "ambi_rule",
           "named": true
