@@ -5,8 +5,11 @@
 %agent: Rabbit()
 %agent: Fox()
 
+// These rabbits reproduce asexually
 'rabbits born'  Rabbit(), . -> Rabbit(), Rabbit() @ rabbitbirth
+// Foxes die of natural causes
 'foxes died'    Fox() -> . @ foxdeath
+// Foxes reproduce by eating a rabbit
 'foxes born'    Fox(), Rabbit(), . -> Fox(), ., Fox() @ foxbirth
 
 %obs: 'Rabbits' |Rabbit()|

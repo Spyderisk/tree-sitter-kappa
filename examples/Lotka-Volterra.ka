@@ -12,5 +12,5 @@
 // Foxes reproduce by eating a rabbit
 'foxes born'    Fox(), Rabbit(), . -> Fox(), ., Fox() @ foxbirth
 
-%obs: Rabbits |Rabbit()|
-%obs: Foxes   |Fox()|
+%obs: 'Rabbits' |Rabbit()|
+%obs: 'Foxes'   |Fox()|
