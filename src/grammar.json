@@ -1909,8 +1909,16 @@
           "value": "("
         },
         {
-          "type": "SYMBOL",
-          "name": "signature_interface"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "signature_interface"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         },
         {
           "type": "STRING",
@@ -2686,7 +2694,7 @@
     },
     "float": {
       "type": "PATTERN",
-      "value": "-?[0-9]+\\.[0-9]+"
+      "value": "-?[0-9]*\\.?[0-9]+"
     },
     "comment": {
       "type": "TOKEN",

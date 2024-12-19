@@ -250,7 +250,7 @@ module.exports = grammar({
 
 		// https://kappalanguage.org/sites/kappalanguage.org/files/inline-files/Kappa_Manual.pdf#31
 		signature_declaration: $ => seq("%agent:", $.signature_expression),
-		signature_expression: $ => seq($.agent_name, "(", $.signature_interface, ")"),
+		signature_expression: $ => seq($.agent_name, "(", optional($.signature_interface), ")"),
 		signature_interface: $ => choice( // This one is weird, I'm interpreting it different to how it's defined
 			seq($.site_name, optional($.set_of_internal_states), optional($.set_of_link_states), optional($.more_signature)),
 			seq($.site_name, optional($.set_of_link_states), optional($.set_of_internal_states), optional($.more_signature)),
