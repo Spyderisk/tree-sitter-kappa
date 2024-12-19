@@ -8,5 +8,16 @@
 
 - Write tests
     - Should I test each functionality seperately? 
+    - Step through all the tests making sure they all look good
 
 - Write syntax highlighting
+
+## Notes
+
+- Regex to select line sequences in an emitted tree: ` \[[0-9, \[\]-]+\]`
+
+### Issues with the Kappa Manual
+
+- I can't copy and paste code exerpts because they come out as the wrong characters? Some characters seem to use unicode variants
+- <https://kappalanguage.org/sites/kappalanguage.org/files/inline-files/Kappa_Manual.pdf#31> Pretty sure the third line of `signature-interface` needs a `|`
+- Define what `␣` means, it seems the implementation lets it be either a space or comma.

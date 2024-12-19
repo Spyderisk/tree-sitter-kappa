@@ -84,38 +84,46 @@
     },
     "agent_name": {
       "type": "SYMBOL",
-      "name": "name"
+      "name": "_name"
     },
     "site_name": {
       "type": "SYMBOL",
-      "name": "name"
+      "name": "_name"
     },
     "state_name": {
       "type": "SYMBOL",
-      "name": "name"
+      "name": "_name"
     },
     "agent": {
       "type": "SEQ",
       "members": [
         {
-          "type": "SYMBOL",
-          "name": "agent_name"
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "agent_name"
+          }
         },
         {
           "type": "STRING",
           "value": "("
         },
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "interface"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
+          "type": "FIELD",
+          "name": "interfaces",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "interface"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
         },
         {
           "type": "STRING",
@@ -1364,7 +1372,7 @@
     },
     "counter_name": {
       "type": "SYMBOL",
-      "name": "name"
+      "name": "_name"
     },
     "counter_expression": {
       "type": "SEQ",
@@ -1397,7 +1405,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "variable_name"
+          "name": "_variable_name"
         }
       ]
     },
@@ -1427,9 +1435,9 @@
         }
       ]
     },
-    "variable_name": {
+    "_variable_name": {
       "type": "SYMBOL",
-      "name": "name"
+      "name": "_name"
     },
     "variable_declaration": {
       "type": "SEQ",
@@ -1439,18 +1447,26 @@
           "value": "%var:"
         },
         {
-          "type": "SYMBOL",
-          "name": "declared_variable_name"
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "declared_variable_name"
+          }
         },
         {
-          "type": "SYMBOL",
-          "name": "algebraic_expression"
+          "type": "FIELD",
+          "name": "value",
+          "content": {
+            "type": "SYMBOL",
+            "name": "algebraic_expression"
+          }
         }
       ]
     },
     "declared_variable_name": {
       "type": "SYMBOL",
-      "name": "variable_name"
+      "name": "_variable_name"
     },
     "algebraic_expression": {
       "type": "CHOICE",
@@ -1882,8 +1898,12 @@
           "value": "%plot:"
         },
         {
-          "type": "SYMBOL",
-          "name": "declared_variable_name"
+          "type": "FIELD",
+          "name": "value",
+          "content": {
+            "type": "SYMBOL",
+            "name": "declared_variable_name"
+          }
         }
       ]
     },
@@ -1895,12 +1915,20 @@
           "value": "%obs:"
         },
         {
-          "type": "SYMBOL",
-          "name": "label"
+          "type": "FIELD",
+          "name": "label",
+          "content": {
+            "type": "SYMBOL",
+            "name": "label"
+          }
         },
         {
-          "type": "SYMBOL",
-          "name": "algebraic_expression"
+          "type": "FIELD",
+          "name": "value",
+          "content": {
+            "type": "SYMBOL",
+            "name": "algebraic_expression"
+          }
         }
       ]
     },
@@ -1921,24 +1949,32 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "SYMBOL",
-          "name": "agent_name"
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "agent_name"
+          }
         },
         {
           "type": "STRING",
           "value": "("
         },
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "signature_interface"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
+          "type": "FIELD",
+          "name": "interfaces",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "signature_interface"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
         },
         {
           "type": "STRING",
@@ -2273,7 +2309,7 @@
     },
     "parameter_name": {
       "type": "SYMBOL",
-      "name": "name"
+      "name": "_name"
     },
     "parameter_value": {
       "type": "SYMBOL",
@@ -2332,7 +2368,7 @@
     },
     "declared_token_name": {
       "type": "SYMBOL",
-      "name": "name"
+      "name": "_name"
     },
     "effect_list": {
       "type": "SEQ",
@@ -2687,7 +2723,7 @@
         }
       ]
     },
-    "name": {
+    "_name": {
       "type": "CHOICE",
       "members": [
         {

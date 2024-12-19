@@ -2,20 +2,27 @@
   {
     "type": "agent",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "agent_name",
-          "named": true
-        },
-        {
-          "type": "interface",
-          "named": true
-        }
-      ]
+    "fields": {
+      "interfaces": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "interface",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "agent_name",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -44,17 +51,7 @@
   {
     "type": "agent_name",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "name",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
   },
   {
     "type": "algebraic_expression",
@@ -294,17 +291,7 @@
   {
     "type": "counter_name",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "name",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
   },
   {
     "type": "counter_state_mod",
@@ -328,17 +315,7 @@
   {
     "type": "counter_var",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "variable_name",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
   },
   {
     "type": "declared_token",
@@ -358,32 +335,12 @@
   {
     "type": "declared_token_name",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "name",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
   },
   {
     "type": "declared_variable_name",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "variable_name",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
   },
   {
     "type": "effect",
@@ -829,43 +786,35 @@
     }
   },
   {
-    "type": "name",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "observable_declaration",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "algebraic_expression",
-          "named": true
-        },
-        {
-          "type": "label",
-          "named": true
-        }
-      ]
+    "fields": {
+      "label": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "label",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "algebraic_expression",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
     "type": "parameter_name",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "name",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
   },
   {
     "type": "parameter_setting",
@@ -923,16 +872,17 @@
   {
     "type": "plot_declaration",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "declared_variable_name",
-          "named": true
-        }
-      ]
+    "fields": {
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "declared_variable_name",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1175,20 +1125,27 @@
   {
     "type": "signature_expression",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "agent_name",
-          "named": true
-        },
-        {
-          "type": "signature_interface",
-          "named": true
-        }
-      ]
+    "fields": {
+      "interfaces": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "signature_interface",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "agent_name",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1283,32 +1240,12 @@
   {
     "type": "site_name",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "name",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
   },
   {
     "type": "state_name",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "name",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
   },
   {
     "type": "string_expression",
@@ -1360,35 +1297,27 @@
   {
     "type": "variable_declaration",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "algebraic_expression",
-          "named": true
-        },
-        {
-          "type": "declared_variable_name",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "variable_name",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "name",
-          "named": true
-        }
-      ]
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "declared_variable_name",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "algebraic_expression",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {

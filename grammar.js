@@ -23,31 +23,34 @@ module.exports = grammar({
 	rules: {
 		root: $ => repeat(
 			choice(
-				$.variable_declaration,
-				$.init_declaration,
-				$.signature_declaration,
-				$.parameter_setting,
-				$.declared_token,
-				$.intervention,
+				$.variable_declaration, // %var
+				$.init_declaration, // %init
+				$.signature_declaration, // %agent
+				$.parameter_setting, // %def
+				$.declared_token, // %token
+				$.intervention, // %mod
 
 				$.f_rule,
 				$.fr_rule,
 				$.ambi_rule,
 				$.ambi_fr_rule,
 
-				$.plot_declaration,
-				$.observable_declaration,
+				$.plot_declaration, // %plot
+				$.observable_declaration, // %obs
 			)
 		),
 
 		// https://kappalanguage.org/sites/kappalanguage.org/files/inline-files/Kappa_Manual.pdf#28
 		pattern: $ => prec.left(1, seq($.agent, optional($.more_pattern))),
 
-		agent_name: $ => $.name,
-		site_name: $ => $.name,
-		state_name: $ => $.name,
+		agent_name: $ => $._name,
+		site_name: $ => $._name,
+		state_name: $ => $._name,
 
-		agent: $ => seq($.agent_name, "(", optional($.interface), ")"),
+		agent: $ => seq(
+			field("name", $.agent_name),
+			"(", field("interfaces", optional($.interface)), ")"
+		),
 		site: $ => choice( //FIXME (site_name internal_state) == counter
 			seq($.site_name, $.internal_state, $.link_state),
 			seq($.site_name, $.internal_state),
@@ -178,16 +181,20 @@ module.exports = grammar({
 			$.counter_name, "{", choice($.counter_expression, $.counter_var, $.counter_mod), "}"
 		),
 
-		counter_name: $ => $.name,
+		counter_name: $ => $._name,
 		counter_expression: $ => seq(choice("=", ">="), $.integer),
-		counter_var: $ => seq("=", $.variable_name),
+		counter_var: $ => seq("=", $._variable_name),
 		counter_mod: $ => seq(choice("-", "+"), "=", $.integer),
-		variable_name: $ => $.name,
+		_variable_name: $ => $._name,
 
 		// https://kappalanguage.org/sites/kappalanguage.org/files/inline-files/Kappa_Manual.pdf#2e
 
-		variable_declaration: $ => seq("%var:", $.declared_variable_name, $.algebraic_expression),
-		declared_variable_name: $ => $.variable_name,
+		variable_declaration: $ => seq(
+			"%var:",
+			field("name", $.declared_variable_name),
+			field("value", $.algebraic_expression)
+		),
+		declared_variable_name: $ => $._variable_name,
 
 		algebraic_expression: $ => choice(
 			$.float,
@@ -216,13 +223,6 @@ module.exports = grammar({
 			"inf"
 		),
 
-		// binary_op: $ => choice(
-		// 	pred.left("+", "-"),
-		// 	"*", "/",
-		// 	"^",
-		// 	"[mod]"
-		// ),
-
 		unary_op: $ => choice(
 			"[log]", "[exp]", "[sin]", "[cos]", "[tan]", "[sqrt]"
 		),
@@ -245,12 +245,22 @@ module.exports = grammar({
 
 		// https://kappalanguage.org/sites/kappalanguage.org/files/inline-files/Kappa_Manual.pdf#30
 
-		plot_declaration: $ => seq("%plot:", $.declared_variable_name),
-		observable_declaration: $ => seq("%obs:", $.label, $.algebraic_expression),
+		plot_declaration: $ => seq(
+			"%plot:",
+			field("value", $.declared_variable_name)
+		),
+		observable_declaration: $ => seq(
+			"%obs:",
+			field("label", $.label),
+			field("value", $.algebraic_expression),
+		),
 
 		// https://kappalanguage.org/sites/kappalanguage.org/files/inline-files/Kappa_Manual.pdf#31
 		signature_declaration: $ => seq("%agent:", $.signature_expression),
-		signature_expression: $ => seq($.agent_name, "(", optional($.signature_interface), ")"),
+		signature_expression: $ => seq(
+			field("name", $.agent_name),
+			"(", field("interfaces", optional($.signature_interface)), ")"
+		),
 		signature_interface: $ => choice( // This one is weird, I'm interpreting it different to how it's defined
 			seq($.site_name, optional($.set_of_internal_states), optional($.set_of_link_states), optional($.more_signature)),
 			seq($.site_name, optional($.set_of_link_states), optional($.set_of_internal_states), optional($.more_signature)),
@@ -273,7 +283,7 @@ module.exports = grammar({
 		// https://kappalanguage.org/sites/kappalanguage.org/files/inline-files/Kappa_Manual.pdf#33
 
 		parameter_setting: $ => seq("%def:", $.parameter_name, $.parameter_value),
-		parameter_name: $ => $.name, // FIXME: What's going on here?
+		parameter_name: $ => $._name, // FIXME: What's going on here?
 		parameter_value: $ => $.algebraic_expression,
 
 		// https://kappalanguage.org/sites/kappalanguage.org/files/inline-files/Kappa_Manual.pdf#34
@@ -282,7 +292,7 @@ module.exports = grammar({
 		another_token: $ => seq(",", $.token), // Epsilon
 
 		declared_token: $ => seq("%token:", $.declared_token_name),
-		declared_token_name: $ => $.name,
+		declared_token_name: $ => $._name,
 
 		// https://kappalanguage.org/sites/kappalanguage.org/files/inline-files/Kappa_Manual.pdf#35
 
@@ -310,7 +320,7 @@ module.exports = grammar({
 		),
 
 		// https://kappalanguage.org/sites/kappalanguage.org/files/inline-files/Kappa_Manual.pdf#27
-		name: $ => choice(/[a-zA-Z][a-zA-Z0-9_~\-+]*/, /[_][a-zA-Z0-9_~\-+]+/),
+		_name: $ => choice(/[a-zA-Z][a-zA-Z0-9_~\-+]*/, /[_][a-zA-Z0-9_~\-+]+/),
 		label: $ => /'[^\n']+'/,
 		number: $ => /[0-9]+/,
 		integer: $ => /-?[0-9]+/,
