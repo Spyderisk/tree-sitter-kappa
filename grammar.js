@@ -131,7 +131,7 @@ module.exports = grammar({
 			optional($.f_rule_expression), optional(seq("|", $.token)), "@", $.rate, "{", $.rate, "}",
 		),
 
-		f_rule_expression: $ => seq($.agent_mod, /*optional($.more_agent_mod)*/), // Epsilon
+		f_rule_expression: $ => seq($.agent_mod, optional($.more_agent_mod)), // Epsilon
 
 		more_agent_mod: $ => seq( // Epsilon
 			",", $.agent_mod, optional($.more_agent_mod)
@@ -139,7 +139,7 @@ module.exports = grammar({
 
 		agent_mod: $ => choice(
 			seq($.agent_name, "(", optional($.interface_mod), ")"),
-			seq($.agent_name, "(", $.interface, ")", choice("+", "-")) // Unknown if the +/- is correct?
+			seq($.agent_name, "(", optional($.interface), ")", choice("+", "-")) // Unknown if the +/- is correct?
 		),
 
 		site_mod: $ => choice(
@@ -332,6 +332,7 @@ module.exports = grammar({
 		[$.site, $.site_mod],
 		[$.site, $.link_state_mod],
 		[$.internal_state, $.internal_state_mod],
-		[$.counter, $.counter_state_mod]
+		[$.counter, $.counter_state_mod],
+		[$.agent, $.agent_mod]
 	]
 });

@@ -517,11 +517,15 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
           "type": "agent_mod",
+          "named": true
+        },
+        {
+          "type": "more_agent_mod",
           "named": true
         }
       ]

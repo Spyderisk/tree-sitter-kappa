@@ -908,6 +908,18 @@
         {
           "type": "SYMBOL",
           "name": "agent_mod"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "more_agent_mod"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         }
       ]
     },
@@ -980,8 +992,16 @@
               "value": "("
             },
             {
-              "type": "SYMBOL",
-              "name": "interface"
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "interface"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
             },
             {
               "type": "STRING",
@@ -2765,6 +2785,10 @@
     [
       "counter",
       "counter_state_mod"
+    ],
+    [
+      "agent",
+      "agent_mod"
     ]
   ],
   "precedences": [],
