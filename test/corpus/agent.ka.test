@@ -1,0 +1,59 @@
+=======================
+%agent
+=======================
+
+%agent: A(x,c)
+%agent: B(x)
+%agent: C(x1{u p},x2{u p})
+%agent: D()
+
+---
+
+(root
+  (signature_declaration
+    (signature_expression
+      (agent_name
+        (name))
+      (signature_interface
+        (site_name
+          (name))
+        (more_signature
+          (signature_interface
+            (site_name
+              (name)))))))
+  (signature_declaration
+    (signature_expression
+      (agent_name
+        (name))
+      (signature_interface
+        (site_name
+          (name)))))
+  (signature_declaration
+    (signature_expression
+      (agent_name
+        (name))
+      (signature_interface
+        (site_name
+          (name))
+        (set_of_internal_states
+          (set_of_state_names
+            (state_name
+              (name))
+            (set_of_state_names
+              (state_name
+                (name)))))
+        (more_signature
+          (signature_interface
+            (site_name
+              (name))
+            (set_of_internal_states
+              (set_of_state_names
+                (state_name
+                  (name))
+                (set_of_state_names
+                  (state_name
+                    (name))))))))))
+  (signature_declaration
+    (signature_expression
+      (agent_name
+        (name)))))

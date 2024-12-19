@@ -1,0 +1,31 @@
+=======================
+%var
+=======================
+
+%var: float 2.1
+%var: number 64
+%var: expr 9 + 10
+
+---
+(root
+  (variable_declaration
+    (declared_variable_name
+      (variable_name
+        (name )))
+    (algebraic_expression
+      (float )))
+  (variable_declaration
+    (declared_variable_name
+      (variable_name
+        (name )))
+    (algebraic_expression
+      (float )))
+  (variable_declaration
+    (declared_variable_name
+      (variable_name
+        (name )))
+    (algebraic_expression
+      (algebraic_expression
+        (float ))
+      (algebraic_expression
+        (float )))))

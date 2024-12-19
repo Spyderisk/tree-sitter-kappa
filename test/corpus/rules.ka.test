@@ -1,0 +1,335 @@
+=======================
+f rule (Chem form)
+=======================
+
+'f-rule chem' A(x[.]), A(y[.]) -> A(x[1]), A(y[1]) @ 0.001
+
+---
+
+(root
+  (f_rule
+    (label)
+    (f_rule_chem
+      (rule_expression
+        (agent
+          (agent_name
+            (name))
+          (interface
+            (site
+              (site_name
+                (name))
+              (link_state))))
+        (more
+          (agent
+            (agent_name
+              (name))
+            (interface
+              (site
+                (site_name
+                  (name))
+                (link_state))))
+          (more)
+          (agent
+            (agent_name
+              (name))
+            (interface
+              (site
+                (site_name
+                  (name))
+                (link_state
+                  (number))))))
+        (agent
+          (agent_name
+            (name))
+          (interface
+            (site
+              (site_name
+                (name))
+              (link_state
+                (number))))))
+      (rate
+        (algebraic_expression
+          (float))))))
+
+=======================
+fr rule (Chem form)
+=======================
+
+'fr-rule chem'K(s[.]),S(e[.],x{u}) <-> K(s[1]),S(e[1],x{u}) @ 0.001, 0.1
+
+---
+
+(root
+  (fr_rule
+    (label)
+    (rev_rule_expression
+      (agent
+        (agent_name
+          (name))
+        (interface
+          (site
+            (site_name
+              (name))
+            (link_state))))
+      (rev_more
+        (agent
+          (agent_name
+            (name))
+          (interface
+            (site
+              (site_name
+                (name))
+              (link_state))
+            (more_interface
+              (site
+                (site_name
+                  (name))
+                (internal_state
+                  (state_name
+                    (name)))))))
+        (rev_more)
+        (agent
+          (agent_name
+            (name))
+          (interface
+            (site
+              (site_name
+                (name))
+              (link_state
+                (number))))))
+      (agent
+        (agent_name
+          (name))
+        (interface
+          (site
+            (site_name
+              (name))
+            (link_state
+              (number)))
+          (more_interface
+            (site
+              (site_name
+                (name))
+              (internal_state
+                (state_name
+                  (name))))))))
+    (rate
+      (algebraic_expression
+        (float)))
+    (rate
+      (algebraic_expression
+        (float)))))
+
+=======================
+ambi rule (Chem form)
+=======================
+
+'ambi-rule chem'A(x[.]), A(y[.]) -> A(x[1]), A(y[1]) @ 0.001 {0.1}
+
+---
+
+(root
+  (ambi_rule
+    (label)
+    (ambi_rule_chem
+      (rule_expression
+        (agent
+          (agent_name
+            (name))
+          (interface
+            (site
+              (site_name
+                (name))
+              (link_state))))
+        (more
+          (agent
+            (agent_name
+              (name))
+            (interface
+              (site
+                (site_name
+                  (name))
+                (link_state))))
+          (more)
+          (agent
+            (agent_name
+              (name))
+            (interface
+              (site
+                (site_name
+                  (name))
+                (link_state
+                  (number))))))
+        (agent
+          (agent_name
+            (name))
+          (interface
+            (site
+              (site_name
+                (name))
+              (link_state
+                (number))))))
+      (rate
+        (algebraic_expression
+          (float)))
+      (rate
+        (algebraic_expression
+          (float))))))
+
+=======================
+ambi fr rule (Chem form)
+=======================
+
+'ambi-fr-rule chem'A(x[.]), A(y[.]) <-> A(x[1]), A(y[1]) @ 0.001 {0.1} 0.3
+
+---
+
+(root
+  (ambi_fr_rule
+    (label)
+    (rev_rule_expression
+      (agent
+        (agent_name
+          (name))
+        (interface
+          (site
+            (site_name
+              (name))
+            (link_state))))
+      (rev_more
+        (agent
+          (agent_name
+            (name))
+          (interface
+            (site
+              (site_name
+                (name))
+              (link_state))))
+        (rev_more)
+        (agent
+          (agent_name
+            (name))
+          (interface
+            (site
+              (site_name
+                (name))
+              (link_state
+                (number))))))
+      (agent
+        (agent_name
+          (name))
+        (interface
+          (site
+            (site_name
+              (name))
+            (link_state
+              (number))))))
+    (rate
+      (algebraic_expression
+        (float)))
+    (rate
+      (algebraic_expression
+        (float)))
+    (rate
+      (algebraic_expression
+        (float)))))
+
+=======================
+fr rule (Edit form)
+=======================
+
+'f-rule edit' A(y{#/p}[1/7]), D(q[0])+, B(x[1/0],y[_/7]), C()- @ 0.001
+
+---
+
+(root
+  (f_rule
+    (label)
+    (f_rule_edit
+      (f_rule_expression
+        (agent_mod
+          (agent_name
+            (name))
+          (interface_mod
+            (site_mod
+              (site_name
+                (name))
+              (internal_state_mod
+                (state_name
+                  (name)))
+              (link_state_mod
+                (number)
+                (number)))))
+        (more_agent_mod
+          (agent_mod
+            (agent_name
+              (name))
+            (interface
+              (site
+                (site_name
+                  (name))
+                (link_state
+                  (number)))))
+          (more_agent_mod
+            (agent_mod
+              (agent_name
+                (name))
+              (interface_mod
+                (site_mod
+                  (site_name
+                    (name))
+                  (link_state_mod
+                    (number)
+                    (number)))
+                (more_mod
+                  (site_mod
+                    (site_name
+                      (name))
+                    (link_state_mod
+                      (number))))))
+            (more_agent_mod
+              (agent_mod
+                (agent_name
+                  (name)))))))
+      (rate
+        (algebraic_expression
+          (float))))))
+
+=======================
+ambi rule (Edit form)
+=======================
+
+'ambi-rule edit' A(x[./1]), A(y[./1]) @ 0.001 {0.1}
+
+---
+
+(root
+  (ambi_rule
+    (label)
+    (ambi_rule_edit
+      (f_rule_expression
+        (agent_mod
+          (agent_name
+            (name))
+          (interface_mod
+            (site_mod
+              (site_name
+                (name))
+              (link_state_mod
+                (number)))))
+        (more_agent_mod
+          (agent_mod
+            (agent_name
+              (name))
+            (interface_mod
+              (site_mod
+                (site_name
+                  (name))
+                (link_state_mod
+                  (number)))))))
+      (rate
+        (algebraic_expression
+          (float)))
+      (rate
+        (algebraic_expression
+          (float))))))

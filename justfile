@@ -7,3 +7,6 @@ gen:
 # Test it on `examples/Lotka–Volterra-mod.ka`
 parse: gen
     -tree-sitter parse examples/Lotka-Volterra-mod.ka | ack --passthru 'ERROR'
+
+test: gen
+    tree-sitter test
